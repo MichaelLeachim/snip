@@ -15,7 +15,12 @@ def complete_cd(c,line,cur_dir,sort='by_name'):
   new_path  = parse_path(line,cur_dir)
   if word:
     new_path.append(word+'*')
-  return tags_count_sort(tags_autocomplete(c,new_path),sort).keys()
+  return tags_count_sort(
+    tags = 
+    tags_count_difference_update()
+
+
+    tags_autocomplete(c,new_path),sort).keys()
 
 def complete_cd_free(c,line,cur_dir,sort="by_name"):
   """ complete that does not based on cur_dir """
@@ -24,15 +29,13 @@ def complete_cd_free(c,line,cur_dir,sort="by_name"):
   new_path  = parse_path(line,cur_dir)
   if word:
     result = set(tags_count_sort(tag_autocomplete(c,word),sort).keys())
-    
-    
   return []
 
 def complete_cd_or_free(c,line,cur_dir,sort='by_name'):
   """
-    Autocomplete algorythm(with word suggestion)
-    Try autocomplete with complete_cd,
-    otherwise try to autocomplete cd_free
+    Autocomplete algorythm(with word suggestion):
+      1. Try autocomplete with complete_cd,
+      2. otherwise try to autocomplete cd_free
   """  
   result = complete_cd(c,line,cur_dir,sort)
   if not result:
@@ -41,13 +44,13 @@ def complete_cd_or_free(c,line,cur_dir,sort='by_name'):
 
 def complete_mv(c,line,cur_dir,sort):
   """
-  mv completion
-    Algorythm:
+      Algorythm:
       1. In case of <word>
   1. tries to complete directory dependend
     2. In case of fail, switches to directory independend completion
   """
   line      = parse_strip_line_from_command(line)
+  complete_ls
   #  line,word = parse_complete_prepare_line(line)
   if parse_is_word(line):
     result = tag_tags_autocomplete(c,line)
@@ -59,9 +62,6 @@ def complete_mv(c,line,cur_dir,sort):
       return tags_count_sort(tag_autocomplete(c,word),sort)
   else:
 
-    
-    
-    
   
     
 
@@ -271,8 +271,9 @@ def tags_remove(c,on,tags):
 
     
 
-def tags_autocomplete(c,tags):
-  tags = u.tags_to_string(tags)
+def tags_autocomplete(c,tags,exclude_self=True):
+  tags_list = u.tags_to_list(tags)
+  tags_str  = u.tags_to_string(tags_list)
   on   = sql_get(c,matchee=tags)
   return tags_count(on)
 
