@@ -12,8 +12,26 @@ def a_bit_of_ipsum():
   
   return [sentence,word]
 
-
-
+import re
+# def exclude_pattern_from_string(pattern,tag_string):
+#   """ return [string without pattern, pattern] """
+#   if type(pattern) == "str":
+#     pattern = re.compile(pattern,re.DOTALL)
+#   if not tag_string:
+#     return ['','']
+#   result = list(pattern.findall(tag_string))
+#   if result:
+#     return [result[0],pattern.sub('',tag_string)]
+#   return [None,tag_string]
+__stp_pattern = re.compile('[\s\n]+')
+def stp(pattern):
+  """
+    Strip Pattern from whitespaces and new_lines
+    pattern must be string
+    
+  """
+  return __stp_pattern.sub('',pattern )
+  
 
 import difflib
 def two_words_difference(wordA,wordB):
@@ -37,12 +55,18 @@ def from_clip():
   """
   return pyperclip.paste()
 
+def contains_word(line,word):
+  if word in everything_to_list(line):
+    return True
+  return False
+
 
 def split_list(array,keyword):
   """ split array by keyword
       keyword is not returned 
 
   """
+  array = everything_to_list(array)
   try:
     index = array.index(keyword)
     return [array[:index],array[index+1:]]
@@ -50,11 +74,33 @@ def split_list(array,keyword):
     return [array,[]]
 
 
+
+
 def weak_get(data,index):
   try:
     return data[index]
   except IndexError:
     return None
+
+def weak_index(array,el):
+  try:
+    return array.index(el)
+  except ValueError:
+    return None
+def weak_del(data,index):
+  try:
+    r = data[index]
+    del data[index]
+    return r
+  except KeyError:
+    return None
+
+def weak_var(var):
+  try:
+    return var
+  except:
+    return None
+  
 
 
 def weak_pop(array):
@@ -68,6 +114,22 @@ def weak_to_int(string):
     return int(string)
   except ValueError:
     return None
+from itertools import chain
+def generator_is_not_empty(gen):
+  try:
+    x = gen.next()
+  except StopIteration:
+    return False
+  return chain([x],gen)
+
+def generator_append(gen1,gen2):
+  return chain(gen1,gen2)
+
+def list_minus_list(listA,listB):
+  for i in listA:
+    if not (i in listB):
+      yield i
+
 
 import re
 __sp_split_pattern = re.compile("\s+") # have to do because of state. 
@@ -115,9 +177,9 @@ def tags_to_string(tags):
   if tags == None:
     return ''
   if type(tags) == str:
-    return ' '.join(sorted(list(set(tags.split(TAG_SPLITTER)))))    
+    return ' '.join(sorted(list(set(tags.split(TAG_SPLITTER))))).strip()
   else:
-    return ' '.join(sorted(list(set(tags))))
+    return ' '.join(sorted(list(set(tags)))).strip()
   
 def everything_to_str(smth):
   if type(smth) == str:
