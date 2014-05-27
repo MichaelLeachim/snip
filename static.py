@@ -1,11 +1,12 @@
 #Vars from this file will be available on all other files 
-import os 
+import os
+import re
 HOME_DIR                 = '/home/mik/test/'
 DEFAULT_EDITOR           = 'vim'
 DEFAULT_FOLDER_NAME      = ".snip"
 NODES_FOLDER             = "nodes"
 PROGRAM_FOLDER           = "/home/mik/test/.snip/"
-TAG_SPLITTER             = ' '
+TAG_SPLITTER             = re.compile('\s+')
 FROM_DISK_PARSE_PATTERN  = """
     ~::::
       (?P<rowid>ID-[0-9]+\s)?

@@ -12,26 +12,32 @@ class View(cmd.Cmd):View46,770
 r_m = lambda: reload(m)r_m74,1444
 v = View()v75,1468
 
-/home/mik/snip-reloaded/main_reloaded.py,1030
+/home/mik/snip-reloaded/main_reloaded.py,1346
 def complete_cd(c,path,sort='by_name',with_word=False):complete_cd4,64
 def complete_ls(c,nodes,cur_dir,with_word=False):complete_ls24,536
 def dir_nodes(c,path):dir_nodes32,811
-def complete_mv(c,nodes,path,with_word,sort):complete_mv41,1101
-def misc_tables_create(c):misc_tables_create54,1363
-def misc_list_minus_list(listA,listB):misc_list_minus_list61,1552
-def tags_count(on):tags_count71,1684
-def tags_count_sort(on,sort='by_name'):tags_count_sort82,1877
-    def sort_func(el): return el[0].lower()sort_func88,2049
-    def sort_func(el): return el[1]sort_func90,2119
-def sql_get(c,rowid=None,matcher='tags',matchee=''):sql_get95,2237
-def sql_get_all(c):sql_get_all103,2537
-def sql_set(c,data):sql_set107,2639
-def sql_update(c,on,func):sql_update112,2801
-  def map_func(k,v):map_func113,2828
-def sql_update_or_create(c,on,func):sql_update_or_create123,3123
-  def map_func(k,v):map_func124,3160
-def sql_delete(c,on):sql_delete138,3516
-def sql_get_notags_nodes(c):sql_get_notags_nodes142,3618
+def complete_mv(c,nodes,cur_dir,path,with_word,sort):complete_mv41,1101
+def complete_new(c,tags,with_word=False,sort='by_name'):complete_new56,1528
+def command_mv(c,nodes,cur_dir,new_path):command_mv67,1853
+  def map_func(el):map_func72,1997
+def command_ls(c,cur_dir):command_ls82,2235
+  def map_func(el):map_func94,2539
+def nodes_by_number(c,cur_dir,nodes):nodes_by_number103,2803
+    def filter_func(el):filter_func107,2898
+    def filter_func(el):filter_func110,2949
+def misc_tables_create(c):misc_tables_create119,3078
+def tags_count(on):tags_count131,3302
+def tags_count_sort(on,sort='by_name'):tags_count_sort142,3495
+    def sort_func(el): return el[0].lower()sort_func148,3667
+    def sort_func(el): return el[1]sort_func150,3737
+def sql_get(c,rowid=None,matcher='tags',matchee=''):sql_get156,3856
+def sql_get_all(c):sql_get_all164,4156
+def sql_set(c,data):sql_set168,4258
+def sql_update(c,on):sql_update173,4420
+def sql_update_or_create(c,on,func):sql_update_or_create185,4735
+  def map_func(k,v):map_func186,4772
+def sql_delete(c,on):sql_delete200,5128
+def sql_get_notags_nodes(c):sql_get_notags_nodes204,5230
 
 /home/mik/snip-reloaded/main.py,5635
 class manage_ContextObject:manage_ContextObject28,720
@@ -138,22 +144,34 @@ def complete_mv(nodes,tags):complete_mv59,1128
 x = re.compile('^mv ([0-9\*\s]*) to (.*?)$')x64,1184
 x = re.compile("((f)(u)(c)(k))")x65,1229
 
-/home/mik/snip-reloaded/main_test.py,708
-set_data = [[u"python django view testing", u'node_data',u'metadata'],set_data11,190
-operated_data = [(1,u"python django view testing",  u'node_data',u'metadata'),operated_data15,403
-  "django":1, tags_count_data20,672
-def cconn():cconn31,809
-  def fin():fin36,932
-def test_cconn(cconn):test_cconn41,1025
-def test_complete_cd(cconn):test_complete_cd46,1118
-def test_dir_nodes(cconn):test_dir_nodes70,1795
-def test_complete_ls(cconn):test_complete_ls79,1986
-def test_complete_mv(cconn):test_complete_mv106,2754
-def test_split_list():test_split_list126,4012
-def test_list_minus_list():test_list_minus_list132,4240
-def test_generator_is_not_empty():test_generator_is_not_empty135,4329
+/home/mik/snip-reloaded/main_test.py,1381
+set_data = [[u"django python testing view",     u'node_data',u'metadata'],set_data14,408
+operated_data = [ (1,u"django python testing view",     u'node_data',u'metadata'),operated_data21,867
+  "django":1, tags_count_data26,1142
+def cconn():cconn37,1301
+  def fin():fin42,1424
+def test_cconn(cconn):test_cconn47,1517
+def test_sql_update(cconn):test_sql_update51,1607
+def test_complete_cd(cconn):test_complete_cd68,2224
+def test_dir_nodes(cconn):test_dir_nodes92,2901
+def test_complete_ls(cconn):test_complete_ls101,3092
+def test_tags_count(cconn):test_tags_count126,3856
+def test_tags_to_list():test_tags_to_list131,3992
+def test_tags_to_str():test_tags_to_str137,4185
+def test_tags_count_sort(cconn):test_tags_count_sort146,4634
+def test_complete_mv(cconn):test_complete_mv152,4834
+def test_split_list():test_split_list171,6190
+def test_list_minus_list():test_list_minus_list177,6418
+def test_generator_is_not_empty():test_generator_is_not_empty180,6507
+def test_command_mv(cconn):test_command_mv189,6735
+def test_command_mv_2(cconn):test_command_mv_2208,7591
+def test_command_ls(cconn):test_command_ls222,8152
+def test_complete_new(cconn):test_complete_new236,8724
+def test_command_new(cconn):test_command_new242,8819
+def test_nodes_by_number(cconn):test_nodes_by_number252,8881
+def test_another_mv(cconn):test_another_mv267,9347
 
-/home/mik/snip-reloaded/utils.py,1506
+/home/mik/snip-reloaded/utils.py,1559
 def a_bit_of_ipsum():a_bit_of_ipsum5,47
   def sentence():sentence8,117
   def word():word10,180
@@ -173,23 +191,24 @@ def weak_pop(array):weak_pop106,2014
 def weak_to_int(string):weak_to_int112,2103
 def generator_is_not_empty(gen):generator_is_not_empty118,2223
 def generator_append(gen1,gen2):generator_append125,2348
-__sp_split_pattern = re.compile("\s+") # have to do because of state. __sp_split_pattern131,2420
-def sp_split(data):sp_split132,2491
-__filter_numbers_pattern = re.compile('[0-9]+')__filter_numbers_pattern136,2554
-def filter_numbers(array):filter_numbers137,2602
-def list_dir(path,mode=0):list_dir144,2745
-    def comparator(i):comparator151,2906
-    def comparator(i):comparator154,2996
-    def comparator(i):comparator157,3080
-def tags_to_list(tags):tags_to_list164,3188
-def tags_to_string(tags):tags_to_string172,3369
-def everything_to_str(smth):everything_to_str180,3589
-def everything_to_list(smth):everything_to_list185,3684
+def list_minus_list(listA,listB):list_minus_list128,2408
+__sp_split_pattern = re.compile("\s+") # have to do because of state. __sp_split_pattern135,2511
+def sp_split(data):sp_split136,2582
+__filter_numbers_pattern = re.compile('[0-9]+')__filter_numbers_pattern140,2645
+def filter_numbers(array):filter_numbers141,2693
+def list_dir(path,mode=0):list_dir148,2836
+    def comparator(i):comparator155,2997
+    def comparator(i):comparator158,3087
+    def comparator(i):comparator161,3171
+def tags_to_list(tags):tags_to_list168,3279
+def tags_to_str(tags):tags_to_str177,3509
+def everything_to_str(smth):everything_to_str189,3881
+def everything_to_list(smth):everything_to_list194,3976
 
-/home/mik/snip-reloaded/static.py,350
-HOME_DIR                 = '/home/mik/test/'HOME_DIR3,70
-DEFAULT_EDITOR           = 'vim'DEFAULT_EDITOR4,115
-DEFAULT_FOLDER_NAME      = ".snip"DEFAULT_FOLDER_NAME5,148
-NODES_FOLDER             = "nodes"NODES_FOLDER6,183
-PROGRAM_FOLDER           = "/home/mik/test/.snip/"PROGRAM_FOLDER7,218
-TAG_SPLITTER             = ' 'TAG_SPLITTER8,269
+/home/mik/snip-reloaded/static.py,364
+HOME_DIR                 = '/home/mik/test/'HOME_DIR4,79
+DEFAULT_EDITOR           = 'vim'DEFAULT_EDITOR5,124
+DEFAULT_FOLDER_NAME      = ".snip"DEFAULT_FOLDER_NAME6,157
+NODES_FOLDER             = "nodes"NODES_FOLDER7,192
+PROGRAM_FOLDER           = "/home/mik/test/.snip/"PROGRAM_FOLDER8,227
+TAG_SPLITTER             = re.compile('\s+')TAG_SPLITTER9,278

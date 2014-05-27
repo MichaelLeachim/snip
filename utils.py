@@ -168,18 +168,23 @@ def list_dir(path,mode=0):
 def tags_to_list(tags):
   if tags == None:
     return []
-  if type(tags) == list:
+  if type(tags) == list or type(tags) == set:
     return sorted(list(set(tags)))
   else:
-    return sorted(list(set(tags.split(TAG_SPLITTER))))
+    tags = set([i for i in TAG_SPLITTER.split(tags) if i])
+    return sorted(tags)
 
-def tags_to_string(tags):
+def tags_to_str(tags):
   if tags == None:
     return ''
-  if type(tags) == str:
-    return ' '.join(sorted(list(set(tags.split(TAG_SPLITTER))))).strip()
+  if (type(tags) == list) or (type(tags) == set):
+    tags = (i.strip() for i in tags)
+    tags = sorted(set(tags))
+    return tags_to_str(' '.join(tags))   # WTF !!!!! <but does not working otherwise> mystery.
   else:
-    return ' '.join(sorted(list(set(tags)))).strip()
+    tags = set([i for i in TAG_SPLITTER.split(tags) if i])
+    return ' '.join(sorted(tags))
+
   
 def everything_to_str(smth):
   if type(smth) == str:

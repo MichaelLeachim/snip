@@ -41,15 +41,106 @@ def dir_nodes(c,path):
 def complete_mv(c,nodes,cur_dir,path,with_word,sort):
   if (not path):
     return complete_ls(c,nodes,cur_dir,with_word)
+  if (not nodes):
+    return complete_ls(c,[],cur_dir,with_word)    
+    
 
   data  = tags_count_sort(tags_count(sql_get_all(c)),sort)
-  data  = u.list_minus_list((i[0] for i in data if i),path)
+  data  = u.list_minus_list((i[0] for i in data),path)
+  
   if with_word:
     word = u.weak_pop(path)
     return (i for i in data if i.startswith(word))
     
-  return data  
+  return data
+def complete_new(c,tags,with_word=False,sort='by_name'):
+  data  = tags_count_sort(tags_count(sql_get_all(c)),sort)
+  data  = u.list_minus_list((i[0] for i in data),tags)
   
+  if with_word:
+    word = u.weak_pop(tags)
+    return (i for i in data if i.startswith(word))
+  return data
+
+
+#m.command_mv(c,nodes,cur_dir,new_path)
+def command_mv(c,nodes,cur_dir,new_path):
+  nodes    = nodes_by_number(c,cur_dir,nodes)
+  old_tags = set(cur_dir)
+  new_tags = set(new_path)
+  
+  def map_func(el):
+    tags = set(u.tags_to_list(el[1]))
+    tags.difference_update(old_tags)
+    tags.update(new_tags)
+    tags = u.tags_to_str(tags)
+    el = list(el)
+    el[1] = tags
+    return el
+  sql_update(c,map(map_func,nodes))
+
+def command_cp(c,nodes,cur_dir,new_dir):
+  nodes = nodes_by_number(c,cur_dir,nodes)
+  cur_dir = set(cur_dir)
+  new_dir = set(new_dir)
+  def map_func(el):
+    el   = list(el)
+    tags = set(u.tags_to_list(el[1]))
+    tags.difference_update(cur_dir)
+    tags.update(new_dir)
+    el[1] = u.tags_to_str(tags)
+    return el[1:]
+
+  sql_set(c,map(map_func,nodes))
+    
+    
+    
+    
+    
+    
+  
+  
+  
+  
+def command_new(c,tags,node_data,metadata):
+  tags = u.tags_to_str(tags)
+  set_data = [(tags,node_data,metadata)]
+  sql_set(c,set_data)
+
+def command_ls(c,cur_dir):
+  """
+  0 ID:1 TAGS: python django testing view
+  node_data
+  ==============================
+  1 ID:2 TAGS: python quicksort ruby
+  node_data
+  ==============================
+  """  
+  format_string ="""{number} ID:{rowid} TAGS: {tags}
+{node}
+=============================="""
+  def map_func(el):
+    number,data = el
+    rowid,tags,node,metadata = data
+    tags = u.tags_to_str(tags)
+    return format_string.format(rowid=rowid,tags=tags,node=node,number=number)
+  return '\n'.join(map(map_func,enumerate(dir_nodes(c,cur_dir))))
+  
+    
+  
+def nodes_by_number(c,cur_dir,nodes):
+  cur_nodes = dir_nodes(c,cur_dir)
+  
+  if '*' in nodes:
+    def filter_func(el):
+      return True
+  else:
+    def filter_func(el):
+      return el[0] in nodes
+  return (i[1] for i in enumerate(cur_nodes) if filter_func(i))
+    
+
+
   
 
 
@@ -107,16 +198,17 @@ def sql_set(c,data):
   """ data == [tags,node,metadata] """
   return c.executemany(""" INSERT INTO TAG (tags,node,metadata) VALUES (?,?,?)""",data)
 
-def sql_update(c,on,func):
-  def map_func(k,v):
-    if v:
-      return ("%s = ?"%k,v)
+def sql_update(c,on):
   for i in on:
-    result = map(map_func,zip(['tags','node','metadata'],func(i)))
-    query = ','.join(result.keys())
-    data  =  result.values()
-    data.append(i[0])
-    c.execute("""UPDATE TAG SET %s WHERE rowid = ?"""%query,data)
+    if i[0]:
+      data = list(i[1:])
+      data.extend([i[0]])
+#      print data
+      c.execute("""UPDATE TAG SET tags = ?, node = ?, metadata = ? WHERE rowid = ?""",data)
+    else:
+      c.execute("""INSERT INTO TAG (tags,node,metadata) VALUES (?,?,?)""",i[1:])
+  return c
+
 
 def sql_update_or_create(c,on,func):
   def map_func(k,v):
